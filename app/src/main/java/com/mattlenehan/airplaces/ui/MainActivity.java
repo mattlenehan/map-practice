@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton fab = findViewById(R.id.fab);
     fab.setOnClickListener(view -> {
-
+      goToMaps(mPlaces);
     });
 
 
@@ -196,6 +197,13 @@ public class MainActivity extends AppCompatActivity {
     intent.putExtra("placeName", place.name);
     intent.putExtra("placeAddress", place.address);
     intent.putExtra("placeCoordinates", place.coordinates);
+    startActivity(intent);
+    overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit);
+  }
+
+  private void goToMaps(List<Place> places) {
+    Intent intent = new Intent(this, MapsActivity.class);
+    intent.putParcelableArrayListExtra("places", (ArrayList<? extends Parcelable>) places);
     startActivity(intent);
     overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit);
   }

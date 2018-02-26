@@ -1,5 +1,8 @@
 package com.mattlenehan.airplaces.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 
@@ -7,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by mattlenehan on 2/25/18.
  */
 
-public class Place {
+public class Place implements Parcelable {
 
   @SerializedName("Name")
   public String name;
@@ -24,4 +27,36 @@ public class Place {
     this.address = address;
     this.coordinates = coordinates;
   }
+
+  public Place(Parcel parcel) {
+    this.name = parcel.readString();
+    this.address = parcel.readString();
+    this.coordinates = parcel.readString();
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel parcel, int i) {
+    parcel.writeString(name);
+    parcel.writeString(address);
+    parcel.writeString(coordinates);
+  }
+
+  public static final Parcelable.Creator<Place> CREATOR =
+      new Parcelable.Creator<Place>() {
+
+        @Override
+        public Place createFromParcel(Parcel parcel) {
+          return new Place(parcel);
+        }
+
+        @Override
+        public Place[] newArray(int i) {
+          return new Place[i];
+        }
+      };
 }
