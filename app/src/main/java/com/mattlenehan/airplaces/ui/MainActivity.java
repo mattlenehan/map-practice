@@ -1,9 +1,7 @@
 package com.mattlenehan.airplaces.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
@@ -22,9 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -45,8 +41,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-
-import static com.mattlenehan.airplaces.R.color.colorTertiary;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
   @Inject
   Gson mGson;
 
-  @SuppressLint("ResourceAsColor")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -227,8 +220,6 @@ public class MainActivity extends AppCompatActivity {
       Place place = mPlacesManager.getPlaces().get(position);
       AirPlacesViewHolder placeViewHolder = viewHolder;
       placeViewHolder.mPlaceName.setText(place.name);
-//      placeViewHolder.mPlaceAddress.setText(place.address);
-
       placeViewHolder.mMapView.onCreate(null);
       placeViewHolder.mMapView.setOnClickListener(view -> {});
       placeViewHolder.mMapView.getMapAsync(googleMap -> {
@@ -266,9 +257,6 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.place_name)
     TextView mPlaceName;
-//
-//    @BindView(R.id.place_address)
-//    TextView mPlaceAddress;
 
     @BindView(R.id.map_view)
     MapView mMapView;

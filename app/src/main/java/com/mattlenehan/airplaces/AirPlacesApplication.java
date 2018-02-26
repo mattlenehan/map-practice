@@ -1,23 +1,13 @@
 package com.mattlenehan.airplaces;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.mattlenehan.airplaces.dagger.AirPlacesComponent;
 import com.mattlenehan.airplaces.dagger.AirPlacesModule;
 import com.mattlenehan.airplaces.dagger.DaggerAirPlacesComponent;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-/**
- * Created by mattlenehan on 2/24/18.
- */
 
 public class AirPlacesApplication extends Application {
 

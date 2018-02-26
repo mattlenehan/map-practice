@@ -1,15 +1,9 @@
 package com.mattlenehan.airplaces.api;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.mattlenehan.airplaces.models.AirTableResponse;
-import com.mattlenehan.airplaces.models.Place;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -22,10 +16,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-
-/**
- * Created by mattlenehan on 2/25/18.
- */
 @Singleton
 public class AirPlacesApi {
 
@@ -68,19 +58,10 @@ public class AirPlacesApi {
       call.enqueue(new Callback() {
         @Override
         public void onFailure(Call call, IOException e) {
-//          subscriber.onError(new RequestException(call.request(), e));
         }
 
         @Override
         public void onResponse(Call call, Response response) throws IOException {
-          if (!response.isSuccessful()) {
-            try {
-
-            } catch (Exception e) {
-            }
-            return;
-          }
-
           subscriber.onSuccess(response);
         }
       });

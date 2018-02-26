@@ -8,9 +8,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-/**
- * Created by mattlenehan on 2/25/18.
- */
 @Singleton
 public class PlacesManager {
   private List<Place> mPlaces = new ArrayList<>();

@@ -5,7 +5,6 @@ import java.util.concurrent.Callable;
 import io.reactivex.Single;
 import io.reactivex.exceptions.Exceptions;
 
-
 public class SingleUtils {
   public static <T> Single<T> fromCallable(Callable<T> callable) {
     return Single.create(subscriber -> {
