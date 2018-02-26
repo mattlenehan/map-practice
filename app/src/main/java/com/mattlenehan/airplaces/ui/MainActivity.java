@@ -1,7 +1,9 @@
 package com.mattlenehan.airplaces.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +19,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.mattlenehan.airplaces.AirPlacesApplication;
 import com.mattlenehan.airplaces.R;
@@ -34,6 +43,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.mattlenehan.airplaces.R.color.colorTertiary;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
   @Inject
   Gson mGson;
 
+  @SuppressLint("ResourceAsColor")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -83,12 +95,9 @@ public class MainActivity extends AppCompatActivity {
 
     configureActionBar();
 
-    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-    fab.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
+    FloatingActionButton fab = findViewById(R.id.fab);
+    fab.setOnClickListener(view -> {
 
-      }
     });
 
 
@@ -128,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
   public void configureActionBar() {
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+    getSupportActionBar().setIcon(R.drawable.ic_mark);
   }
 
   private void getPlaces() {
@@ -192,12 +202,32 @@ public class MainActivity extends AppCompatActivity {
       AirPlacesViewHolder placeViewHolder = viewHolder;
       placeViewHolder.mPlaceName.setText(place.name);
       placeViewHolder.mPlaceAddress.setText(place.address);
-      placeViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          goToMaps(place);
+
+      placeViewHolder.mMapView.onCreate(null);
+      placeViewHolder.mMapView.setOnClickListener(view -> {});
+      placeViewHolder.mMapView.getMapAsync(googleMap -> {
+        String[] coordinates = place.coordinates.split(",");
+        if (coordinates.length != 2) {
+          return;
         }
+        LatLng location =
+            new LatLng(Double.parseDouble(coordinates[0]), Double.parseDouble(coordinates[1]));
+        googleMap.addMarker(new MarkerOptions()
+                .position(location)
+                .title(String.format("Marker in %s", place.name)));
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+            .target(location)
+            .zoom(17)
+            .build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
+        googleMap.getUiSettings().setZoomControlsEnabled(false);
+        googleMap.getUiSettings().setAllGesturesEnabled(false);
       });
+      placeViewHolder.mMapView.setClickable(false);
+
+      placeViewHolder.mViewOnMapButton.setOnClickListener(view -> goToMaps(place));
     }
 
     @Override
@@ -213,6 +243,12 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.place_address)
     TextView mPlaceAddress;
+
+    @BindView(R.id.map_view)
+    MapView mMapView;
+
+    @BindView(R.id.view_on_map_button)
+    TextView mViewOnMapButton;
 
     public AirPlacesViewHolder(View view) {
       super(view);
