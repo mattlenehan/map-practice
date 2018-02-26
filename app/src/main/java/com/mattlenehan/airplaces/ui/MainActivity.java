@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -94,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
     mScrollable = false;
 
     configureActionBar();
+    showLoader();
+
+    mPlacesView.getViewTreeObserver().addOnGlobalLayoutListener(this::verifyScrollability);
 
     FloatingActionButton fab = findViewById(R.id.fab);
     fab.setOnClickListener(view -> {
@@ -134,15 +138,29 @@ public class MainActivity extends AppCompatActivity {
     getPlaces();
   }
 
-  public void configureActionBar() {
+  private void verifyScrollability() {
+    if (!mScrollable) {
+      if (mLayoutManager.findLastCompletelyVisibleItemPosition() < mLayoutManager.getChildCount() - 1) {
+        AppBarLayout.LayoutParams params =
+            (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
+        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+            | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+        mToolbar.setLayoutParams(params);
+        mScrollable = true;
+      } else {
+        mScrollable = false;
+      }
+    }
+  }
+
+  private void configureActionBar() {
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    getSupportActionBar().setIcon(R.drawable.ic_mark);
+    getSupportActionBar().setIcon(R.drawable.ic_logo_yellow);
+    getSupportActionBar().setDisplayShowTitleEnabled(false);
   }
 
   private void getPlaces() {
-    showLoader();
-
     mAirPlacesApi.getPlaces()
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -201,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
       Place place = mPlacesManager.getPlaces().get(position);
       AirPlacesViewHolder placeViewHolder = viewHolder;
       placeViewHolder.mPlaceName.setText(place.name);
-      placeViewHolder.mPlaceAddress.setText(place.address);
+//      placeViewHolder.mPlaceAddress.setText(place.address);
 
       placeViewHolder.mMapView.onCreate(null);
       placeViewHolder.mMapView.setOnClickListener(view -> {});
@@ -240,9 +258,9 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.place_name)
     TextView mPlaceName;
-
-    @BindView(R.id.place_address)
-    TextView mPlaceAddress;
+//
+//    @BindView(R.id.place_address)
+//    TextView mPlaceAddress;
 
     @BindView(R.id.map_view)
     MapView mMapView;

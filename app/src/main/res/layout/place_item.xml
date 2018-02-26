@@ -13,60 +13,41 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_margin="8dp"
-        card_view:cardCornerRadius="4dp">
+        card_view:cardElevation="6dp"
+        card_view:cardCornerRadius="8dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
 
-            <LinearLayout
-                android:id="@+id/card_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="4dp"
-                android:background="@color/colorSecondary">
-                <TextView
-                    android:id="@+id/place_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"/>
-
-                <TextView
-                    android:id="@+id/place_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:textSize="11sp"
-                    android:textColor="@color/white"/>
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/map_view"
-                android:background="@android:color/transparent"
-                android:textColor="@color/colorTertiary"
-                android:text="Test text"/>
-
             <com.google.android.gms.maps.MapView
                 android:id="@+id/map_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/card_header"
                 android:layout_above="@id/view_on_map_button"
                 map:mapType="normal"
                 map:liteMode="true"/>
 
             <TextView
+                android:id="@+id/place_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/map_view"
+                android:padding="4dp"
+                android:background="@drawable/gradient_bg"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:text="Test text"/>
+
+            <TextView
                 android:id="@+id/view_on_map_button"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
+                android:gravity="end"
+                android:background="@color/white"
                 android:padding="6dp"
                 android:textAllCaps="true"
                 android:textSize="16sp"
