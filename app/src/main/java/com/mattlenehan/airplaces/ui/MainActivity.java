@@ -1,6 +1,7 @@
 package com.mattlenehan.airplaces.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -162,6 +163,15 @@ public class MainActivity extends AppCompatActivity {
     mProgress.setVisibility(View.GONE);
   }
 
+  private void goToMaps(Place place) {
+    Intent intent = new Intent(this, MapsActivity.class);
+    intent.putExtra("placeName", place.name);
+    intent.putExtra("placeAddress", place.address);
+    intent.putExtra("placeCoordinates", place.coordinates);
+    startActivity(intent);
+    overridePendingTransition(R.anim.activity_enter, R.anim.activity_exit);
+  }
+
   private class AirPlacesListAdapter extends RecyclerView.Adapter<AirPlacesViewHolder> {
 
     @Override
@@ -182,6 +192,12 @@ public class MainActivity extends AppCompatActivity {
       AirPlacesViewHolder placeViewHolder = viewHolder;
       placeViewHolder.mPlaceName.setText(place.name);
       placeViewHolder.mPlaceAddress.setText(place.address);
+      placeViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          goToMaps(place);
+        }
+      });
     }
 
     @Override

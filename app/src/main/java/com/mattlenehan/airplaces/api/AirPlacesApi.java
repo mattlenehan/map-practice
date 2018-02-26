@@ -48,13 +48,10 @@ public class AirPlacesApi {
             .url())
         .build();
 
-    Log.e("MATT","[url] " + mGson.toJson(request.url()));
     return getResponse(mClient.newCall(request))
         .map(response -> {
-//          Log.e("MATT","[response] " + response.body().string());
           try {
             AirTableResponse airTableResponse = mGson.fromJson(response.body().string(), AirTableResponse.class);
-            Log.e("MATT","here");
             return airTableResponse;
           } catch (Exception e) {
             throw new RuntimeException(e);
